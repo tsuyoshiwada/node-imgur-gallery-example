@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
 "use strict";
 
 const Router = require("express").Router;
 const multer = require("multer");
-const imgur = require("imgur");
+const Item = require("../models/item");
 
 const router = Router();
 const storage = multer.memoryStorage();
@@ -10,7 +11,13 @@ const upload = multer({ storage });
 
 
 router.get("/", (req, res) => {
-  res.send("ok");
+  Item.find({})
+    .then(items => {
+      res.json({ items });
+    })
+    .catch(error => {
+      res.status(500).json({ error });
+    });
 });
 
 
@@ -18,12 +25,13 @@ router.post("/", upload.single("file"), (req, res) => {
   const { file } = req;
   const base64 = file.buffer.toString("base64");
 
-  imgur.uploadBase64(base64)
-    .then(json => {
-      res.json(json);
+  Item.uploadItem(base64, file.originalname)
+    .then(item => {
+      res.json({ item });
     })
-    .catch(err => {
-      console.error(err); // eslint-disable-line no-console
+    .catch(error => {
+      console.error(error);
+      res.status(500).json({ error });
     });
 });
 

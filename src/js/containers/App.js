@@ -5,8 +5,8 @@ import { connect } from "react-redux";
 import * as ItemActions from "../actions/items";
 
 
-@autobind
 @connect(state => state)
+@autobind
 export default class App extends Component {
   constructor(props) {
     super(props);
