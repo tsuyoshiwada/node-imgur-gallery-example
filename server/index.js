@@ -1,6 +1,8 @@
 "use strict";
 
+require("dotenv").config();
 const mongoose = require("mongoose");
+const imgur = require("imgur");
 const express = require("express");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
@@ -9,7 +11,13 @@ const apiRoutes = require("./routes/api.js");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
+// MongoDB
 mongoose.connect("mongodb://localhost/node-imgur-gallery-example");
+
+
+// Imgur
+imgur.setClientId(process.env.IMGUR_CLIENT_ID);
 
 
 // Middleware
